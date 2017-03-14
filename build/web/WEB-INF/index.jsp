@@ -26,6 +26,6 @@
                 <input type="submit" value="Submit">   
         </form>
         <h1>Hello World!</h1>
-        <p>${classifier}${setting}</p>
+        <p>${result}</p>
     </body>
 </html>

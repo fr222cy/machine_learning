@@ -12,7 +12,8 @@ package com.Machine_learning.controller;
  */
 import java.io.IOException;
 import java.util.List;
-
+import com.Machine_learning.model.NaiveBayes;
+import com.Machine_learning.model.SupportVectorMachine;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,13 +34,28 @@ public class mainServlet extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
-        //inititerar object
+        
+        
+        
         
         String classifier = request.getParameter("classifier");
+        System.out.println("---------------------"+classifier+"-----------------");
         String setting = request.getParameter("setting");
+        String result;
+        if(classifier == "nb"){
+            NaiveBayes nb = new NaiveBayes();
+            result = nb.getResult();
+        }else if(classifier == "svm"){
+            SupportVectorMachine svm = new SupportVectorMachine();
+            result = svm.getResult();
+        }else{
+            result = "Something went wrong!";
+        }
         
-        request.setAttribute("classifier","You seleceted "+ classifier);
-        request.setAttribute("setting", " with "+  setting);
+  
+        
+        request.setAttribute("result",result);
+     
         
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
