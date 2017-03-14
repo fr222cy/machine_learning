@@ -42,10 +42,10 @@ public class mainServlet extends HttpServlet {
         System.out.println("---------------------"+classifier+"-----------------");
         String setting = request.getParameter("setting");
         String result;
-        if(classifier == "nb"){
+        if(classifier.equals("nb")){
             NaiveBayes nb = new NaiveBayes();
             result = nb.getResult();
-        }else if(classifier == "svm"){
+        }else if(classifier.equals("svm")){
             SupportVectorMachine svm = new SupportVectorMachine();
             result = svm.getResult();
         }else{
