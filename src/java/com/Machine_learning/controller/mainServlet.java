@@ -22,13 +22,25 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class mainServlet extends HttpServlet {
-
+    //Statiskt object
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Preprocess request: load list of products for display in JSP.
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {       
         String testString = "Herro word";
         request.setAttribute("testString", testString);
+        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+        //inititerar object
+        
+        String classifier = request.getParameter("classifier");
+        String setting = request.getParameter("setting");
+        
+        request.setAttribute("classifier","You seleceted "+ classifier);
+        request.setAttribute("setting", " with "+  setting);
+        
         request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
     

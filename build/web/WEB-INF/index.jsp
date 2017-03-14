@@ -12,7 +12,20 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <form action="/main/" method="post">
+            <select name="classifier" >
+                <option value="nb">Naive Bayes</option>
+                <option value="svm">Support Vector Machine</option>
+            </select>
+            
+              <select name="setting">
+                <option value="s1">Setting 1</option>
+                <option value="s2">Setting 2</option>
+                <option value="s3">Setting 3</option>
+            </select>
+                <input type="submit" value="Submit">   
+        </form>
         <h1>Hello World!</h1>
-        <p>${testString}</p>
+        <p>${classifier}${setting}</p>
     </body>
 </html>
