@@ -43,31 +43,35 @@ public class mainServlet extends HttpServlet {
             
         
         
-        Preprocessing preprocess = new Preprocessing(datasetPath);
-        String classifier = request.getParameter("classifier");
-        String result;
-        if(classifier.equals("nb")){
-            try {
-                NaiveBayes nb = new NaiveBayes(preprocess.getDataSet());
-                result = nb.getResult();
-
-            } catch (Exception ex) {
-                Logger.getLogger(mainServlet.class.getName()).log(Level.SEVERE, null, ex);
-                result = "Something went wrong!";
+        try {
+            Preprocessing preprocess = new Preprocessing(datasetPath);
+            String classifier = request.getParameter("classifier");
+            String result;
+            if(classifier.equals("nb")){
+                try {
+                    NaiveBayes nb = new NaiveBayes(preprocess.getDataSet());
+                    result = nb.getResult();
+                    
+                } catch (Exception ex) {
+                    Logger.getLogger(mainServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    result = "Something went wrong!";
+                }
+            }else if(classifier.equals("svm")){
+                SupportVectorMachine svm = new SupportVectorMachine();
+                result = svm.getResult();
+            }else{
+                result = "Did not chose a classifier";
             }
-        }else if(classifier.equals("svm")){
-            SupportVectorMachine svm = new SupportVectorMachine();
-            result = svm.getResult();
-        }else{
-           result = "Did not chose a classifier"; 
-        }
+            
+            
+            
+            request.setAttribute("result",result);
              
-  
-        
-        request.setAttribute("result",result);
-     
-        
-        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+            
+            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(mainServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }
