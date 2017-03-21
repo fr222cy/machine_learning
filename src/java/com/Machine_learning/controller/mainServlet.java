@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class mainServlet extends HttpServlet {
     
-    String datasetPath = "/com/Machine_learning/data/categories.arff";
+    String datasetPath = mainServlet.class.getResource("/data/categories.arff").getFile();
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {       
@@ -38,24 +38,15 @@ public class mainServlet extends HttpServlet {
     }
     
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
-        
-            
-        
-        
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+                   
             Preprocessing preprocess = new Preprocessing(datasetPath);
             String classifier = request.getParameter("classifier");
             String result;
             if(classifier.equals("nb")){
-                try {
-                    NaiveBayes nb = new NaiveBayes(preprocess.getDataSet());
-                    result = nb.getResult();
-                    
-                } catch (Exception ex) {
-                    Logger.getLogger(mainServlet.class.getName()).log(Level.SEVERE, null, ex);
-                    result = "Something went wrong!";
-                }
+                NaiveBayes nb = new NaiveBayes(preprocess.getDataSet());
+                result = nb.getResult();
             }else if(classifier.equals("svm")){
                 SupportVectorMachine svm = new SupportVectorMachine();
                 result = svm.getResult();

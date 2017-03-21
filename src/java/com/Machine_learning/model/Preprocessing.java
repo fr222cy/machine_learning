@@ -20,9 +20,7 @@ public class Preprocessing extends Filter implements UnsupervisedFilter, OptionH
     String datasetPath;
     
     public Preprocessing(String path) throws Exception{
-      this.datasetPath = path;    
-      System.out.println("DATASET PATH"+this.datasetPath);
-      
+      this.datasetPath = path;          
     }
     
     
@@ -30,19 +28,19 @@ public class Preprocessing extends Filter implements UnsupervisedFilter, OptionH
         try
         {
             DataSource source = new DataSource(this.datasetPath);
-            System.out.println("DATASET SOURCE"+source);
+          
             Instances data = source.getDataSet();
+            
             StringToWordVector stwv = new StringToWordVector();
             stwv.setStopwordsHandler(new MyStopWords());
-            
-             data = Filter.useFilter(data, stwv);
+            //data = Filter.useFilter(data, stwv);
             if (data.classIndex() == -1)
             {
               data.setClassIndex(data.numAttributes() - 1);
             }
             return data;
         }catch(Exception e){
-            return null;
+            throw new UnsupportedOperationException();
         }
     }
 }

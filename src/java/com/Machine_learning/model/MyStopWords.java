@@ -18,22 +18,22 @@ import weka.core.stopwords.StopwordsHandler;
  * @author filip
  */
 public class MyStopWords implements StopwordsHandler  {
-    private HashSet<String> myStopwords;
-    String words = "/com/Machine_learning/data/stop-word-list.txt";
+    private HashSet<String> myStopwords = new HashSet<String>();
+    String stopwordsPath = MyStopWords.class.getResource("/data/stopwords.txt").getFile();
 
     public MyStopWords() {
         //Load in your own stopwords, etc.
         Scanner sc;
         try {
-            sc = new Scanner(new File(words));
+            sc = new Scanner(new File(stopwordsPath));
             while(sc.hasNext()){
                 String word = sc.nextLine(); 
                 myStopwords.add(word);
             }
-        } catch (FileNotFoundException ex) {
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
             Logger.getLogger(MyStopWords.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
     
     @Override
