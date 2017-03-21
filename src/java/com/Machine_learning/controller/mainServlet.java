@@ -11,15 +11,12 @@ package com.Machine_learning.controller;
  * and open the template in the editor.
  */
 import java.io.IOException;
-import java.util.List;
 import com.Machine_learning.model.NaiveBayes;
 import com.Machine_learning.model.SupportVectorMachine;
 import com.Machine_learning.model.Preprocessing;
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class mainServlet extends HttpServlet {
     
-    String datasetPath = mainServlet.class.getResource("/data/categories.arff").getFile();
+    String datasetPath = mainServlet.class.getResource("/data/categories.arff").getPath();
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {       
@@ -53,15 +50,11 @@ public class mainServlet extends HttpServlet {
             }else{
                 result = "Did not chose a classifier";
             }
-            
-            
-            
             request.setAttribute("result",result);
-             
-            
             request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
         } catch (Exception ex) {
             Logger.getLogger(mainServlet.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Herro");
         }
     }
     
