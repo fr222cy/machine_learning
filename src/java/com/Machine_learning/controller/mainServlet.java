@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.util.List;
 import com.Machine_learning.model.NaiveBayes;
 import com.Machine_learning.model.SupportVectorMachine;
+import com.Machine_learning.model.Preprocessing;
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,8 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 
 
 public class mainServlet extends HttpServlet {
-    //Statiskt object
-
+    
+    String datasetPath = "/com/Machine_learning/data/categories.arff";
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {       
         String testString = "Herro word";
@@ -35,23 +40,28 @@ public class mainServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
         
+            
         
         
-        
+        Preprocessing preprocess = new Preprocessing(datasetPath);
         String classifier = request.getParameter("classifier");
-        System.out.println("---------------------"+classifier+"-----------------");
-        String setting = request.getParameter("setting");
         String result;
         if(classifier.equals("nb")){
-            NaiveBayes nb = new NaiveBayes();
-            result = nb.getResult();
+            try {
+                NaiveBayes nb = new NaiveBayes(preprocess.getDataSet());
+                result = nb.getResult();
+
+            } catch (Exception ex) {
+                Logger.getLogger(mainServlet.class.getName()).log(Level.SEVERE, null, ex);
+                result = "Something went wrong!";
+            }
         }else if(classifier.equals("svm")){
             SupportVectorMachine svm = new SupportVectorMachine();
             result = svm.getResult();
         }else{
-            result = "Something went wrong!";
+           result = "Did not chose a classifier"; 
         }
-        
+             
   
         
         request.setAttribute("result",result);
