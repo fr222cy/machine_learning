@@ -71,7 +71,9 @@ public class scraperServlet extends HttpServlet {
             System.out.println(arr.size());
             int count = 1;
             for(String url : arr){
-                scrapeAndSave(url, category, count++);//byt business --> category
+                if(scrapeAndSave(url, category, count)){
+                    count++;
+                }
             }
         }
     }
@@ -85,43 +87,108 @@ public class scraperServlet extends HttpServlet {
         return tagValues;
     }
     
-    private void scrapeAndSave(String url, String category, int count){
+    private boolean scrapeAndSave(String url, String category, int count){
         
         try {
             if(url.contains("/live/"))
             {
                 System.out.println("LIVE ARTICLE INVALID");
-                return;
+                return false;
             }
-           
-            
             UserAgent agent = new UserAgent();
             agent.visit(url);
+            if(url.contains("/sport/")){
+                return sportScrape(category, agent, count);
+            }
+            else{
+                return normalScrape(category, agent, count);
+            }
+            
+        } catch (ResponseException ex) {
+            System.out.println("Article not found");
+            return false;
+        }
+    }
+    
+       
+    private boolean normalScrape(String category, UserAgent agent, int count){
             String content = "";
             Element title;
             try {
                 title = agent.doc.findFirst("<h1 class=story-body__h1>");
                 content += title.getText() + "\n";
+                Element inner = agent.doc.findFirst("<div class=story-body__inner>");
+                List<Element> text = inner.getChildElements();
+                for(Element t : text)
+                {
+                    String str = t.getText();
+                    if(t.getName().equals("h2") || t.getName().equals("h3")){
+                        str += " ";
+                    }
+                    else if(t.getName().equals("script") || t.getName().equals("style")){
+                        str = "";
+                    }
+                    else if(t.getName().equals("ul"))
+                    {
+                        for(Element e : t.getChildElements()){
+                            str += e.getText() + " ";
+                        }
+                    }
+                    content += str;
+                }
             } catch (NotFound ex) {
-                Logger.getLogger(scraperServlet.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("VIDEO ARTICLE: INVALID");
+                return false;
             }
-            Elements text = agent.doc.findEvery("<div class=story-body>")
-                                     .findEvery("<div class=story-body__inner>")
-                                     .findEvery("<p>");
-            for(Element t : text)
-            {
-                content += t.getText();
-            }
+            
             //System.out.println(content);
+            content = content.replaceAll("[,.!?;:]+\\b(?! .)", "$0 ").replaceAll("\\s+", " "); 
             File file = new File(category);
             String newFilePath = file.getParentFile().getPath()+"/"+count+".txt";
             System.out.println("CREATING FILE: "+count+".txt for " + file.getParentFile().getName() +" ...");
             writeToFile(newFilePath, content);
-            
-        } catch (ResponseException ex) {
-            Logger.getLogger(scraperServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            return true;
     }
+    
+    private boolean sportScrape(String category, UserAgent agent, int count){
+            String content = "";
+            Element title;
+            try {
+                title = agent.doc.findFirst("<h1 class=\"story-headline gel-trafalgar-bold \">");
+                content += title.getText() + "\n";
+                Element inner = agent.doc.findFirst("<div id=story-body>");
+                List<Element> text = inner.getChildElements();
+                for(Element t : text)
+                {
+                    String str = t.getText();
+                    if(t.getName().equals("h2") || t.getName().equals("h3")){
+                        str += " ";
+                    }
+                    else if(t.getName().equals("script") || t.getName().equals("style")){
+                        str = "";
+                    }
+                    else if(t.getName().equals("ul"))
+                    {
+                        for(Element e : t.getChildElements()){
+                            str += e.getText() + " ";
+                        }
+                    }
+                    content += str;
+                }
+            } catch (NotFound ex) {
+                System.out.println("VIDEO ARTICLE: INVALID");
+                return false;
+            }
+            
+            //System.out.println(content);
+            content = content.replaceAll("[,.!?;:]+\\b(?! .)", "$0 ").replaceAll("\\s+", " "); 
+            File file = new File(category);
+            String newFilePath = file.getParentFile().getPath()+"/"+count+".txt";
+            System.out.println("CREATING FILE: "+count+".txt for " + file.getParentFile().getName() +" ...");
+            writeToFile(newFilePath, content);
+            return true;
+    }
+    
     
     private void writeToFile(String path, String content){
         try {
@@ -136,6 +203,6 @@ public class scraperServlet extends HttpServlet {
             Logger.getLogger(scraperServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+ 
 }
 
