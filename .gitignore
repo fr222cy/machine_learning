@@ -1,5 +1,9 @@
 build/*
 
+build
+
+nbproject 
+ 
 nbproject/*
 
 nbproject/private/private.xml
