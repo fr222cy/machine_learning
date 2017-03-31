@@ -1,6 +1,6 @@
-build/
+build/*
 
-nbproject/
+nbproject/*
 
 nbproject/private/private.xml
 
@@ -10,3 +10,30 @@ nbproject/private
 
 nbproject/private/private.properties
 /dist/
+build/web/WEB-INF/classes/.netbeans_update_resources
+
+build/web/WEB-INF/classes/com/Machine_learning/controller/mainServlet.class
+
+build/web/WEB-INF/classes/com/Machine_learning/model/Preprocessing.class
+
+build/web/WEB-INF/classes/com/Machine_learning/model/SupportVectorMachine.class
+
+nbproject/build-impl.xml
+
+nbproject/genfiles.properties
+
+nbproject/project.properties
+
+nbproject/project.xml
+
+build/web/WEB-INF/classes/.netbeans_update_resources
+
+build/web/WEB-INF/classes/com/Machine_learning/controller/mainServlet.class
+
+build/web/WEB-INF/classes/com/Machine_learning/model/Preprocessing.class
+
+build/web/WEB-INF/classes/com/Machine_learning/model/SupportVectorMachine.class
+
+nbproject/build-impl.xml
+
+nbproject/genfiles.properties

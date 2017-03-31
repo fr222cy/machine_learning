@@ -12,7 +12,7 @@ package com.Machine_learning.controller;
  */
 import java.io.IOException;
 import com.Machine_learning.model.MyNaiveBayes;
-import com.Machine_learning.model.SupportVectorMachine;
+import com.Machine_learning.model.MySupportVectorMachine;
 import com.Machine_learning.model.Preprocessing;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,7 +57,8 @@ public class mainServlet extends HttpServlet {
                 nb.applyMethod(method);
                 result = nb.getResult();
             }else if(classifier.equals("svm")){
-                SupportVectorMachine svm = new SupportVectorMachine();
+                MySupportVectorMachine svm = new MySupportVectorMachine(preprocess.getDataSet(shouldPreprocess));
+                svm.applyMethod(method);
                 result = svm.getResult();
             }else{
                 result = "Did not chose a classifier";
