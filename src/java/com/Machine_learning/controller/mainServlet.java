@@ -11,7 +11,7 @@ package com.Machine_learning.controller;
  * and open the template in the editor.
  */
 import java.io.IOException;
-import com.Machine_learning.model.NaiveBayes;
+import com.Machine_learning.model.MyNaiveBayes;
 import com.Machine_learning.model.SupportVectorMachine;
 import com.Machine_learning.model.Preprocessing;
 import java.util.logging.Level;
@@ -37,12 +37,19 @@ public class mainServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-                   
-            Preprocessing preprocess = new Preprocessing(datasetPath);
+            String preprocessVal = request.getParameter("shouldPreprocess"); 
+            boolean shouldPreprocess = false;
+            if(preprocessVal.equals("1")){
+                shouldPreprocess = true;
+            }
+          
+            Preprocessing preprocess = new Preprocessing(datasetPath);  
+           
+            
             String classifier = request.getParameter("classifier");
             String result;
             if(classifier.equals("nb")){
-                NaiveBayes nb = new NaiveBayes(preprocess.getDataSet());
+                MyNaiveBayes nb = new MyNaiveBayes(preprocess.getDataSet(shouldPreprocess));
                 result = nb.getResult();
             }else if(classifier.equals("svm")){
                 SupportVectorMachine svm = new SupportVectorMachine();

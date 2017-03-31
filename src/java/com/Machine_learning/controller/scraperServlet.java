@@ -11,7 +11,7 @@ package com.Machine_learning.controller;
  * and open the template in the editor.
  */
 import java.io.IOException;
-import com.Machine_learning.model.NaiveBayes;
+import com.Machine_learning.model.MyNaiveBayes;
 import com.Machine_learning.model.SupportVectorMachine;
 import com.Machine_learning.model.Preprocessing;
 import com.jaunt.Element;
