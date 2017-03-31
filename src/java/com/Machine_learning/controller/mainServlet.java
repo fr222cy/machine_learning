@@ -42,6 +42,10 @@ public class mainServlet extends HttpServlet {
             if(preprocessVal.equals("1")){
                 shouldPreprocess = true;
             }
+            
+            String method = request.getParameter("testMethod"); 
+            System.out.println("METHOD: " + method);
+            
           
             Preprocessing preprocess = new Preprocessing(datasetPath);  
            
@@ -50,6 +54,7 @@ public class mainServlet extends HttpServlet {
             String result;
             if(classifier.equals("nb")){
                 MyNaiveBayes nb = new MyNaiveBayes(preprocess.getDataSet(shouldPreprocess));
+                nb.applyMethod(method);
                 result = nb.getResult();
             }else if(classifier.equals("svm")){
                 SupportVectorMachine svm = new SupportVectorMachine();

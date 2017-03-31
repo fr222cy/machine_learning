@@ -6,6 +6,7 @@ import weka.core.OptionHandler;
 import weka.core.PropertyPath;
 import weka.core.Stopwords;
 import weka.core.converters.ConverterUtils.DataSource;
+import weka.core.stopwords.Rainbow;
 import weka.core.stopwords.StopwordsHandler;
 import weka.core.tokenizers.CharacterDelimitedTokenizer;
 import weka.core.tokenizers.NGramTokenizer;
@@ -14,7 +15,7 @@ import weka.core.tokenizers.WordTokenizer;
 import weka.filters.Filter;
 import weka.filters.UnsupervisedFilter;
 import weka.filters.unsupervised.attribute.StringToWordVector;
-
+import weka.classifiers.functions.LibSVM;
 
 
 /**
@@ -34,12 +35,15 @@ public class Preprocessing {
         {
             DataSource source = new DataSource(this.datasetPath);    
             Instances data = source.getDataSet();
+            StringToWordVector filter = new StringToWordVector();
             if(shouldPreprocess){
-                //WordTokenizer tokenizer = new WordTokenizer();  
-                StringToWordVector filter = new StringToWordVector();
-                filter.setInputFormat(data);
-                data = Filter.useFilter(data, filter);
+                WordTokenizer tokenizer = new WordTokenizer();
+                Rainbow rainbow =  new Rainbow();
+                filter.setStopwordsHandler(rainbow);
+                filter.setTokenizer(tokenizer);
             }
+            filter.setInputFormat(data);
+            data = Filter.useFilter(data, filter);
             
             if(data.classIndex() == -1){
                 data.setClassIndex(0);

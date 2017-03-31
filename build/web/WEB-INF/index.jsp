@@ -18,10 +18,15 @@
                 <option value="svm">Support Vector Machine</option>
             </select>
             
-              <select name="setting">
-                <option value="s1">Setting 1</option>
-                <option value="s2">Setting 2</option>
-                <option value="s3">Setting 3</option>
+             <select name="testMethod">
+                <option value="cross-validation">Cross-validation</option>
+                <option value="percentage">Train 80% test 20%</option>
+                <option value="test-set">Test set of 2017 articles</option>
+            </select>
+            
+            <select name="shouldPreprocess">
+                <option value="1">Preprocess dataset</option>
+                <option value="0">No preprocessing(Raw text)</option>
             </select>
                 <input type="submit" value="Submit">   
         </form>

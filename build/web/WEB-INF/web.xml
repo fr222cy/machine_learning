@@ -5,10 +5,19 @@
         <servlet-name>mainServlet</servlet-name>
         <servlet-class>com.Machine_learning.controller.mainServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>scraperServlet</servlet-name>
+        <servlet-class>com.Machine_learning.controller.scraperServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>mainServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>scraperServlet</servlet-name>
+        <url-pattern>/scrapethatshit</url-pattern>
+    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30
