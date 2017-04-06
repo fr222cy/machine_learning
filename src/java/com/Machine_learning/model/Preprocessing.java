@@ -1,5 +1,9 @@
 package com.Machine_learning.model;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import weka.classifiers.meta.FilteredClassifier;
 import weka.core.Instances;
 import weka.core.OptionHandler;
@@ -35,15 +39,15 @@ public class Preprocessing {
         {
             DataSource source = new DataSource(this.datasetPath);    
             Instances data = source.getDataSet();
-            StringToWordVector filter = new StringToWordVector();
             if(shouldPreprocess){
                 WordTokenizer tokenizer = new WordTokenizer();
                 Rainbow rainbow =  new Rainbow();
+                StringToWordVector filter = new StringToWordVector();
                 filter.setStopwordsHandler(rainbow);
                 filter.setTokenizer(tokenizer);
+                filter.setInputFormat(data);
+                data = Filter.useFilter(data, filter);
             }
-            filter.setInputFormat(data);
-            data = Filter.useFilter(data, filter);
             
             if(data.classIndex() == -1){
                 data.setClassIndex(0);
@@ -52,6 +56,35 @@ public class Preprocessing {
         }catch(Exception e){
             System.out.println("Error while preprocessing:" + e.getMessage());
             throw new UnsupportedOperationException();
+        }
+    }
+    
+    public List<Instances> getDataSets(String trainPath, String testPath){
+        DataSource train;   
+        DataSource test; 
+        List<Instances> instances = new ArrayList<>();
+        try {
+            train = new DataSource(trainPath);
+            test = new DataSource(testPath);
+        
+            Instances trainSet = train.getDataSet();
+            Instances testSet = test.getDataSet();
+          WordTokenizer tokenizer = new WordTokenizer();
+                Rainbow rainbow =  new Rainbow();
+                StringToWordVector filter = new StringToWordVector();
+                filter.setStopwordsHandler(rainbow);
+                filter.setTokenizer(tokenizer);
+                filter.setInputFormat(trainSet);
+                instances.add(Filter.useFilter(trainSet, filter));
+                instances.add(Filter.useFilter(testSet, filter));
+                instances.get(0).setClassIndex(0);
+                instances.get(1).setClassIndex(0);
+                
+                return instances;
+                
+        } catch (Exception ex) {
+            Logger.getLogger(Preprocessing.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 }

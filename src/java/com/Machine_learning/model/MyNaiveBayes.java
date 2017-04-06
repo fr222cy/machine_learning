@@ -5,7 +5,9 @@
  */
 package com.Machine_learning.model;
 
+import com.Machine_learning.controller.mainServlet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,49 +25,58 @@ import weka.core.converters.ConverterUtils.DataSource;
  * @author filip
  */
 public class MyNaiveBayes {
-    Classifier nb;
+    Classifier classifier;
     Instances dataInstances;
     Evaluation eval;
+    
+    
     public MyNaiveBayes(Instances data){
         dataInstances = data;
         try {
-         nb = new NaiveBayes();
-         nb.buildClassifier(dataInstances);        
+         classifier = new NaiveBayes();
+         classifier.buildClassifier(dataInstances);        
          eval = new Evaluation(dataInstances);
         } catch (Exception ex) {
             Logger.getLogger(MyNaiveBayes.class.getName()).log(Level.SEVERE, null, ex);
         }      
-        
     }
     
-    public void applyMethod(String method){
+    public void applyMethod(String method){ 
         try {
                if(method.equals("cross-validation")){
-                   System.out.println("CHOOSE cross-valid");
-                  eval.crossValidateModel(nb, dataInstances, 4, new Random(1));
+                  eval.crossValidateModel(classifier, dataInstances, 4, new Random(1));
                }else if(method.equals("test-set")){
-                   //TODO
+                   Preprocessing preprocessTestSet = new Preprocessing(null);
+                   List<Instances> datasets = preprocessTestSet.getDataSets(MyNaiveBayes.class.getResource("/data/categories.arff").getPath(), MyNaiveBayes.class.getResource("/data/2017-articles.arff").getPath());
+                   classifier = new NaiveBayes();
+                   classifier.buildClassifier(datasets.get(0));
+                   eval = new Evaluation(datasets.get(0));
+                   eval.evaluateModel(classifier, datasets.get(1));
                }else if(method.equals("percentage")){
-                   int trainSize = (int) Math.round(dataInstances.numInstances() * 0.8);
+                   int trainSize = (int) Math.round(dataInstances.numInstances() * 0.66);
                    int testSize = dataInstances.numInstances() - trainSize;
                    Instances train = new Instances(dataInstances, 0, trainSize);
                    Instances test = new Instances(dataInstances, trainSize, testSize);
                    train.randomize(new java.util.Random(0));
-                   nb.buildClassifier(train);  
-                   eval.evaluateModel(nb, test);
+                   classifier.buildClassifier(train);  
+                   eval.evaluateModel(classifier, test);
                }       
         }catch (Exception ex) {
         Logger.getLogger(MyNaiveBayes.class.getName()).log(Level.SEVERE, null, ex);
         }   
     }
-    
+            
     public String getResult(){
-        try {        
+        try {
             return  eval.toSummaryString();
         } catch (Exception ex) {
             Logger.getLogger(MyNaiveBayes.class.getName()).log(Level.SEVERE, null, ex);
         }
             return "Something went wrong (NB)";
+    }
+    
+    public void writeResultToFile(String nameOfFile){
+        
     }
     
 }

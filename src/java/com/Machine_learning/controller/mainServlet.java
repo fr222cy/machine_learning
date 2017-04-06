@@ -57,6 +57,7 @@ public class mainServlet extends HttpServlet {
                 nb.applyMethod(method);
                 result = nb.getResult();
             }else if(classifier.equals("svm")){
+                
                 MySupportVectorMachine svm = new MySupportVectorMachine(preprocess.getDataSet(shouldPreprocess));
                 svm.applyMethod(method);
                 result = svm.getResult();
