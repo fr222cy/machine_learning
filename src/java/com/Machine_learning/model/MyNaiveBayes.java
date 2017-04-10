@@ -24,11 +24,9 @@ import weka.core.converters.ConverterUtils.DataSource;
  *
  * @author filip
  */
-public class MyNaiveBayes {
+public class MyNaiveBayes extends ClassifierResults{
     Classifier classifier;
     Instances dataInstances;
-    Evaluation eval;
-    
     
     public MyNaiveBayes(Instances data){
         dataInstances = data;
@@ -53,7 +51,7 @@ public class MyNaiveBayes {
                    eval = new Evaluation(datasets.get(0));
                    eval.evaluateModel(classifier, datasets.get(1));
                }else if(method.equals("percentage")){
-                   int trainSize = (int) Math.round(dataInstances.numInstances() * 0.66);
+                   int trainSize = (int) Math.round(dataInstances.numInstances() * 0.785);
                    int testSize = dataInstances.numInstances() - trainSize;
                    Instances train = new Instances(dataInstances, 0, trainSize);
                    Instances test = new Instances(dataInstances, trainSize, testSize);
@@ -66,17 +64,6 @@ public class MyNaiveBayes {
         }   
     }
             
-    public String getResult(){
-        try {
-            return  eval.toSummaryString();
-        } catch (Exception ex) {
-            Logger.getLogger(MyNaiveBayes.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            return "Something went wrong (NB)";
-    }
-    
-    public void writeResultToFile(String nameOfFile){
-        
-    }
+  
     
 }

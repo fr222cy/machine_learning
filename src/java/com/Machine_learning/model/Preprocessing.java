@@ -39,16 +39,16 @@ public class Preprocessing {
         {
             DataSource source = new DataSource(this.datasetPath);    
             Instances data = source.getDataSet();
-            if(shouldPreprocess){
-                WordTokenizer tokenizer = new WordTokenizer();
-                Rainbow rainbow =  new Rainbow();
-                StringToWordVector filter = new StringToWordVector();
-                filter.setStopwordsHandler(rainbow);
-                filter.setTokenizer(tokenizer);
-                filter.setInputFormat(data);
-                data = Filter.useFilter(data, filter);
-            }
             
+            WordTokenizer tokenizer = new WordTokenizer();
+            Rainbow rainbow =  new Rainbow();
+            StringToWordVector filter = new StringToWordVector();
+            if(shouldPreprocess){
+                filter.setStopwordsHandler(rainbow);
+                filter.setTokenizer(tokenizer);    
+            }
+            filter.setInputFormat(data); 
+            data = Filter.useFilter(data, filter);
             if(data.classIndex() == -1){
                 data.setClassIndex(0);
             }

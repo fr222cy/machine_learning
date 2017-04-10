@@ -56,14 +56,18 @@ public class mainServlet extends HttpServlet {
                 MyNaiveBayes nb = new MyNaiveBayes(preprocess.getDataSet(shouldPreprocess));
                 nb.applyMethod(method);
                 result = nb.getResult();
+                nb.writeResultToFile("NaiveBayes_"+method+"_preprocess-"+shouldPreprocess);
             }else if(classifier.equals("svm")){
                 
                 MySupportVectorMachine svm = new MySupportVectorMachine(preprocess.getDataSet(shouldPreprocess));
                 svm.applyMethod(method);
                 result = svm.getResult();
+                svm.writeResultToFile("SVM_"+method+"_preprocess-"+shouldPreprocess);
             }else{
                 result = "Did not chose a classifier";
             }
+            
+            
             request.setAttribute("result",result);
             request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
         } catch (Exception ex) {

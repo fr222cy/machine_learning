@@ -19,20 +19,20 @@ import static weka.core.Utils.splitOptions;
  *
  * @author filip
  */
-public class MySupportVectorMachine{
+public class MySupportVectorMachine extends ClassifierResults{
     LibSVM classifier;
     Instances dataInstances;
-    Evaluation eval;
     String options = "-C 7 -K 2";  //Default gamma( -G ) = 1/number of attributes
   
     public MySupportVectorMachine(Instances data){
         dataInstances = data;
         try {
-            eval = new Evaluation(dataInstances);
             classifier = new LibSVM();
             classifier.setOptions(splitOptions(options));
             classifier.buildClassifier(data);
+            eval = new Evaluation(dataInstances);
         } catch (Exception ex) {
+            System.out.println("THROWN " + ex.getMessage());
             Logger.getLogger(MySupportVectorMachine.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -44,14 +44,14 @@ public class MySupportVectorMachine{
                   eval.crossValidateModel(classifier, dataInstances, 4, new Random(1));
                }else if(method.equals("test-set")){
                    Preprocessing preprocessTestSet = new Preprocessing(null);
-                   List<Instances> datasets = preprocessTestSet.getDataSets(MyNaiveBayes.class.getResource("/data/categories.arff").getPath(), MyNaiveBayes.class.getResource("/data/2017-articles.arff").getPath());
+                   List<Instances> datasets = preprocessTestSet.getDataSets(MySupportVectorMachine.class.getResource("/data/categories.arff").getPath(), MySupportVectorMachine.class.getResource("/data/2017-articles.arff").getPath());
                    classifier = new LibSVM();
                    classifier.setOptions(splitOptions(options));
                    classifier.buildClassifier(datasets.get(0));
                    eval = new Evaluation(datasets.get(0));
                    eval.evaluateModel(classifier, datasets.get(1));
                }else if(method.equals("percentage")){
-                   int trainSize = (int) Math.round(dataInstances.numInstances() * 0.66);
+                   int trainSize = (int) Math.round(dataInstances.numInstances() * 0.785);
                    int testSize = dataInstances.numInstances() - trainSize;
                    Instances train = new Instances(dataInstances, 0, trainSize);
                    Instances test = new Instances(dataInstances, trainSize, testSize);
