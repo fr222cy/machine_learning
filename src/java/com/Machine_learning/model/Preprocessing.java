@@ -64,11 +64,14 @@ public class Preprocessing {
         DataSource test; 
         List<Instances> instances = new ArrayList<>();
         try {
+            
             train = new DataSource(trainPath);
+            
             test = new DataSource(testPath);
         
             Instances trainSet = train.getDataSet();
             Instances testSet = test.getDataSet();
+            
           WordTokenizer tokenizer = new WordTokenizer();
                 Rainbow rainbow =  new Rainbow();
                 StringToWordVector filter = new StringToWordVector();
